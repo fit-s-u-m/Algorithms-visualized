@@ -26,13 +26,14 @@ export class SoundUtil {
     this.setScale(scale)
   }
   setScale(scale: string) {
+    this.counter = 0
     switch (scale) {
       case "አንቺሆዬ":
         this.scale = this.Anchihoye
         console.log(this.scale, scale)
         break
 
-      case "ትዠታ":
+      case "ትዝታ":
         this.scale = this.Tezeta
         console.log(this.scale, scale)
         break
@@ -50,6 +51,7 @@ export class SoundUtil {
         break
       default:
         this.scale = this.Notes
+        console.log("wrong choose")
     }
   }
 
@@ -57,11 +59,12 @@ export class SoundUtil {
     if (this.isMutted) return
     const noteIndex = this.counter % this.scale.length
     const note = this.scale[noteIndex]
-    swaped ? this.playNoteTri(`${note}4`) : this.playNoteSaw(`${note}4`)
+    swaped ? this.playNoteTri(`${note}4`) : this.playNoteSaw(`${note}5`)
   }
   playNoteTri(note: string) {
     const envelope = this.envelops[(this.counter % this.envelops.length)];
     const osc = new TONE.Oscillator({ type: "triangle", frequency: note })
+    // TONE.FeedbackCombFilter
     // osc.volume.value = -10
 
     osc.connect(envelope).start();
@@ -75,8 +78,8 @@ export class SoundUtil {
 
   playNoteSaw(note: string) {
     const envelope = this.envelops[(this.counter % this.envelops.length)];
-    const osc = new TONE.Oscillator({ type: "sawtooth", frequency: note })
-    osc.volume.value = -15
+    const osc = new TONE.Oscillator({ type: "triangle", frequency: note })
+    // osc.volume.value = -15
 
     osc.connect(envelope).start();
 

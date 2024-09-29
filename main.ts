@@ -139,7 +139,6 @@ const sketch = (p: p5) => {
 
     musicalScale.changed(() => {
       sound.setScale(musicalScale.selected())
-      console.log(musicalScale.selected())
     })
 
     sortingAlgorithm.changed(() => {
