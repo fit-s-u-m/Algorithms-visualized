@@ -59,13 +59,38 @@ export class SoundUtil {
     if (this.isMutted) return
     const noteIndex = this.counter % this.scale.length
     const note = this.scale[noteIndex]
-    swaped ? this.playNoteTri(`${note}4`) : this.playNoteSaw(`${note}5`)
+    swaped ? this.playNoteSine(`${note}4`, 0) : this.playNoteSine(`${note}5`, -8)
   }
   playNoteTri(note: string) {
     const envelope = this.envelops[(this.counter % this.envelops.length)];
     const osc = new TONE.Oscillator({ type: "triangle", frequency: note })
-    // TONE.FeedbackCombFilter
+    osc.volume.value = -15
+
+    osc.connect(envelope).start();
+
+    envelope.triggerAttackRelease("0.3");
+
+    osc.stop("+0.4");
+    osc.onstop = () => osc.dispose();
+    this.counter++
+  }
+  playNoteSquare(note: string) {
+    const envelope = this.envelops[(this.counter % this.envelops.length)];
+    const osc = new TONE.Oscillator({ type: "square", frequency: note })
     // osc.volume.value = -10
+
+    osc.connect(envelope).start();
+
+    envelope.triggerAttackRelease("0.3");
+
+    osc.stop("+0.4");
+    osc.onstop = () => osc.dispose();
+    this.counter++
+  }
+  playNoteSine(note: string, volume: number) {
+    const envelope = this.envelops[(this.counter % this.envelops.length)];
+    const osc = new TONE.Oscillator({ type: "sine", frequency: note })
+    osc.volume.value = volume
 
     osc.connect(envelope).start();
 
@@ -94,8 +119,7 @@ export class SoundUtil {
     if (!this.isMutted) {
       TONE.loaded().then(() => {
         this.music.start()
-        const filter = new TONE.Filter(300, "lowpass").toDestination();
-        this.music.connect(filter)
+        // const filter = new TONE.Filter(300, "lowpass").toDestination();
         this.music.volume.value = -20
         this.music.loop = true
       })
