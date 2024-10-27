@@ -4,12 +4,12 @@ export class MergeSort {
   numComp = 0;
   * sort(arr: number[]): ITERATOR {
 
-    if (arr.length < 2)
-      return { arr, index: { i: -1, j: -1 }, swaped: false, numComp: 0 }
+    if (arr.length < 2) {
+      yield { arr, index: [], swaped: false, numComp: 0 };
+      return; // Exit early from the generator function
+    }
 
     let n = arr.length;
-    let temp = arr.slice()
-
     // Start with subarrays of size 1 and merge them
     for (let size = 1; size < n; size *= 2) {
       for (let left = 0; left < n; left += size * 2) {
@@ -17,66 +17,96 @@ export class MergeSort {
         let right = Math.min(left + size * 2, n);
 
         // Merge the two halves
-        yield* this.merge(arr, temp, left, mid, right);
-      }
-      // Copy sorted elements back to original array
-      for (let i = 0; i < n; i++) {
-        arr[i] = temp[i];
+        yield* this.merge(arr, left, mid, right);
       }
     }
-    // yield { arr: arr, index: { i: -1, j: -1 }, swaped: false, numComp: 0 }
+    for (let i = 0; i < n; i++) {
+      yield {
+        arr: arr.slice(),
+        index: [
+          { i, c: "red" },
+        ], swaped: true, numComp: this.numComp
+      }
+    }
   }
-  * merge(arr: number[], temp: number[], left: number, mid: number, right: number): ITERATOR {
+  * merge(arr: number[], left: number, mid: number, right: number): ITERATOR {
     let i = left;   // Starting index for left subarray
     let j = mid;    // Starting index for right subarray
-    let k = left;   // Starting index to be merged
-    let test = []
+    let temp = []
 
     // Merge the two halves into temp[]
     while (i < mid && j < right) {
       if (arr[i] < arr[j]) {
-        temp[k] = arr[i];
-        test.push(arr[i])
-        yield { arr: arr.slice(), index: { i, j, k }, swaped: true, numComp: this.numComp }
+        temp.push(arr[i])
         i++
       } else if (arr[i] > arr[j]) {
-        temp[k] = arr[j];
-        test.push(arr[j])
-        yield { arr: arr.slice(), index: { i, j, k }, swaped: true, numComp: this.numComp }
+        temp.push(arr[j])
         j++
       }
-      // else {
-      //   yield { arr: arr.slice(), index: { i: j, j: j }, swaped: false, numComp: this.numComp }
-      // }
-      k++
+      yield {
+        arr: arr.slice(),
+        index: [
+          { i: left, c: "green" },
+          { i: mid, c: "green" },
+          { i: i, c: "red" },
+          { i: j, c: "blue" },
+        ], swaped: true, numComp: this.numComp
+      }
       this.numComp++
     }
 
 
     // Copy remaining elements of left subarray, if any
     while (i < mid) {
-      temp[k] = arr[i];
-      test.push(arr[i])
-      yield { arr: arr.slice(), index: { i, j, k }, swaped: true, numComp: this.numComp }
-      k++
+      temp.push(arr[i])
+      yield {
+        arr: arr.slice(),
+        index: [
+          { i: left, c: "green" },
+          { i: mid, c: "green" },
+          { i: i, c: "red" },
+          { i: j, c: "blue" },
+        ], swaped: true, numComp: this.numComp
+      }
       i++
       this.numComp++
     }
 
     // Copy remaining elements of right subarray, if any
     while (j < right) {
-      temp[k] = arr[j];
-      test.push(arr[j])
-      yield { arr: arr.slice(), index: { i, j, k }, swaped: true, numComp: this.numComp }
-      k++
+      temp.push(arr[j])
+      yield {
+        arr: arr.slice(),
+        index: [
+          { i: left, c: "green" },
+          { i: mid, c: "green" },
+          { i: i, c: "red" },
+          { i: j, c: "blue" },
+        ], swaped: true, numComp: this.numComp
+      }
       j++
       this.numComp++
     }
-    for (let t = 0; t < test.length; t++) {
-      arr[left + t] = test[t];
+    // show mergeing
+    for (let t = 0; t < temp.length; t++) {
+      arr[left + t] = temp[t];
+      yield {
+        arr: arr.slice(),
+        index: [
+          { i: left + t, c: "red" },],
+        swaped: true, numComp: this.numComp
+      }
+    }
+    yield {
+      arr: arr.slice(),
+      index: [
+        { i: mid, c: "green" },
+        { i: left, c: "green" },
+        { i: i, c: "red" },
+        { i: j, c: "blue" },
+      ], swaped: true, numComp: this.numComp
     }
 
-    yield { arr: arr.slice(), index: { i, j, k }, swaped: true, numComp: this.numComp }
   }
 
   swap(arr: number[], i: number, j: number) {
