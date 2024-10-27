@@ -25,7 +25,7 @@ export class MergeSort {
         arr: arr.slice(),
         index: [
           { i, c: "red" },
-        ], swaped: true, numComp: this.numComp
+        ], swaped: false, numComp: this.numComp
       }
     }
   }
@@ -50,7 +50,7 @@ export class MergeSort {
           { i: mid, c: "green" },
           { i: i, c: "red" },
           { i: j, c: "blue" },
-        ], swaped: true, numComp: this.numComp
+        ], swaped: false, numComp: this.numComp
       }
       this.numComp++
     }
@@ -66,7 +66,7 @@ export class MergeSort {
           { i: mid, c: "green" },
           { i: i, c: "red" },
           { i: j, c: "blue" },
-        ], swaped: true, numComp: this.numComp
+        ], swaped: false, numComp: this.numComp
       }
       i++
       this.numComp++
@@ -82,7 +82,7 @@ export class MergeSort {
           { i: mid, c: "green" },
           { i: i, c: "red" },
           { i: j, c: "blue" },
-        ], swaped: true, numComp: this.numComp
+        ], swaped: false, numComp: this.numComp
       }
       j++
       this.numComp++
@@ -104,7 +104,7 @@ export class MergeSort {
         { i: left, c: "green" },
         { i: i, c: "red" },
         { i: j, c: "blue" },
-      ], swaped: true, numComp: this.numComp
+      ], swaped: false, numComp: this.numComp
     }
 
   }
