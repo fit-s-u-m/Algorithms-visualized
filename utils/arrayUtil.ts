@@ -1,10 +1,11 @@
 import p5 from "p5"
 import { SoundUtil } from "./soundUtil"
+import { INDEX } from "./types"
 
 type param = {
   p: p5
   arr: number[]
-  swapIndex: { i: number, j: number, k?: number }
+  swapIndex: INDEX[]
   swaped: boolean
   json: { style: { color: string, bg_color: string, size_multiplier: number }, letters: string[] } | null
   sound: SoundUtil
@@ -12,7 +13,7 @@ type param = {
 }
 
 export const drawArray = ({ p, arr, swapIndex, swaped, json, sound, font }: param) => {
-  if (swapIndex.i != -1 && swapIndex.j != -1) {
+  if (swapIndex.length > 1) {
     sound.playNotes(swaped)
   }
 
@@ -20,15 +21,12 @@ export const drawArray = ({ p, arr, swapIndex, swaped, json, sound, font }: para
     const xWidth = 0.9 * (p.width / (arr.length))
     const arrWidth = xWidth * arr.length
     const remaingSpace = p.width - arrWidth
-    const maxHeight = (1 / 2) * p.height
-    const xPos = i * xWidth + xWidth / 2 + remaingSpace / 2
-    const yHeight = p.map(arr[i], 0, Math.max(...arr), 10, maxHeight)
-    if (i == swapIndex.i)
-      p.fill("red")
-    if (i == swapIndex.j)
-      p.fill("blue")
-    if (i == swapIndex.k)
-      p.fill("green")
+    const maxHeight = (0.5) * p.height // half of the height
+    const xPos = (i * xWidth) + xWidth / 2 + remaingSpace / 2
+    const yHeight = p.map(arr[i], 0, arr.length, 10, maxHeight)
+    swapIndex.filter(index => index.i == i).forEach(index => {
+      p.fill(index.c)
+    })
     const barSize = p.map(p.width, 50, 2000, 2, 10)
     p.rect(xPos, p.height, barSize, -yHeight) // bar representing the array
     p.fill("#111")

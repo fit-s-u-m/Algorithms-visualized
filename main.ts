@@ -86,7 +86,7 @@ const sketch = (p: p5) => {
           drawArray({
             p,
             arr: lastValue,
-            swapIndex: { i: -1, j: -1 },
+            swapIndex: [],
             swaped: false,
             json: json.nehemiah,
             sound,
@@ -156,7 +156,7 @@ const sketch = (p: p5) => {
       drawArray({
         p,
         arr: lastValue,
-        swapIndex: { i: -1, j: -1 },
+        swapIndex: [],
         swaped: false,
         json: letters,
         sound,
