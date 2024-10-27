@@ -9,7 +9,7 @@ export class SoundUtil {
   Ambasel = ["C", "C#", "F", "G", "G#"];
   Tezeta = ["C", "D", "E", "G", "A"];
   TezetaMinor = ["C", "C#", "D#", "G", "G#"];
-  scale: string[]
+  scale: string[] = []
 
   counter = 0
   constructor(scale: string) {
