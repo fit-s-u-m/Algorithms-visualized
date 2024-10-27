@@ -86,7 +86,7 @@ const sketch = (p: p5) => {
           drawArray({
             p,
             arr: lastValue,
-            swapIndex: { i: -1, j: -1 },
+            swapIndex: [],
             swaped: false,
             json: json.nehemiah,
             sound,
@@ -156,7 +156,7 @@ const sketch = (p: p5) => {
       drawArray({
         p,
         arr: lastValue,
-        swapIndex: { i: -1, j: -1 },
+        swapIndex: [],
         swaped: false,
         json: letters,
         sound,
@@ -189,16 +189,6 @@ const sketch = (p: p5) => {
 
     const prevMuteState = sound.isMutted
     sound.mute()
-    p.background(0)
-    drawArray({
-      p,
-      arr: nextIteration.value.arr,
-      swapIndex: nextIteration.value.index,
-      swaped: nextIteration.value.swaped,
-      json: letters,
-      sound,
-      font: main_font,
-    })
     p.resizeCanvas(app.clientWidth, app.clientHeight)
     if (!prevMuteState) // if previouly has sound
       sound.unmute()

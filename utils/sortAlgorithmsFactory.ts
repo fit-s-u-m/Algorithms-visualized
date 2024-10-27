@@ -1,6 +1,7 @@
 import { BubbleSort } from '../algorithms/bubbleSort';
 import { InsertionSort } from '../algorithms/insertionSort'
 import { SelectionSort } from '../algorithms/selectionSort'
+import { MergeSort } from '../algorithms/mergeSort'
 import { sortingAlgorithms } from './types';
 export class Sort {
   static SortWith(sortingAlgoithm: sortingAlgorithms) {
@@ -18,7 +19,7 @@ export class Sort {
         return new BubbleSort()
       }
       case "Merge Sort": {
-        return new BubbleSort()
+        return new MergeSort()
       }
       case "Quick Sort": {
         return new BubbleSort()

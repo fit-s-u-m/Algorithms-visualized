@@ -33,7 +33,7 @@ export class SoundUtil {
         console.log(this.scale, scale)
         break
 
-      case "ትዠታ":
+      case "ትዝታ":
         this.scale = this.Tezeta
         console.log(this.scale, scale)
         break
@@ -51,6 +51,7 @@ export class SoundUtil {
         break
       default:
         this.scale = this.Notes
+        console.log("wrong choose")
     }
   }
 
@@ -102,8 +103,8 @@ export class SoundUtil {
 
   playNoteSaw(note: string) {
     const envelope = this.envelops[(this.counter % this.envelops.length)];
-    const osc = new TONE.Oscillator({ type: "sawtooth", frequency: note })
-    osc.volume.value = -15
+    const osc = new TONE.Oscillator({ type: "triangle", frequency: note })
+    // osc.volume.value = -15
 
     osc.connect(envelope).start();
 

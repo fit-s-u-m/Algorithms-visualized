@@ -13,15 +13,32 @@ export class InsertionSort {
         if (arr[j] > currentCard) {
           this.swap(arr, j, currentIndex)
           currentIndex = j  // it swaped with j
-          yield { arr, index: { i: i, j, k: j - 1 }, swaped: true, numComp: counter }
+          yield {
+            arr, index: [
+              { i: i, c: "red" },
+              { i: j, c: "blue" },
+              { i: j - 1, c: "green" },
+            ],
+            swaped: true, numComp: counter
+          }
         }
         else { // it is in the right spot 
-          yield { arr, index: { i: i, j, k: j - 1 }, swaped: false, numComp: counter }
+          yield {
+            arr, index: [
+              { i: i, c: "red" },
+              { i: j, c: "blue" },
+              { i: j - 1, c: "green" },
+            ],
+            swaped: false, numComp: counter
+          }
           break
         }
       }
     }
-    yield { arr, index: { i: -1, j: -1 }, swaped: false, numComp: counter }
+    yield {
+      arr, index: [],
+      swaped: false, numComp: counter
+    }
   }
 
   swap(arr: number[], i: number, j: number) {
