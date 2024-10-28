@@ -3,6 +3,7 @@ import * as json from "./public/asset/letters.json"
 import { createArrayForLetters, drawArray } from "./utils/arrayUtil.ts";
 import { SoundUtil } from "./utils/soundUtil.ts";
 import { SortingAlgorithmsFactory } from "./utils/sortAlgorithmsFactory.ts";
+import { Init } from "./intro_scene.ts"
 import {
   ITERATOR,
   ITERATOR_RESULT,
@@ -13,128 +14,44 @@ import QueryParams from "./utils/queryParams.ts";
 const app = document.getElementById("app") as HTMLDivElement;
 
 const sketch = (p: p5) => {
-  let sortAlgorithms: SortAlgorithm;
+
+  const init = new Init(p)
+  if (!init.selections || !init.ui) return
+
+  let sortAlgorithm: SortAlgorithm;
   let iterator: ITERATOR;
   let nextIteration: ITERATOR_RESULT;
   let lastValue: number[];
-  let isMutted = true;
+  let isMutted = true
+  let selectedAlgorithm = init.selections.sortingAlgorithm
+  let musicalScale = init.selections.musicalScale
 
-  const select = p.select("#select");
-  const slider = p.select("#slider");
-  const scale = p.select("#scale"); //musical
-  const slider_label = p.select("#slider-label");
-  const numCompDiv = p.select("#num-comp");
-  const numSwapDiv = p.select("#num-swap");
   let intoDone = false;
   let main_font: p5.Font;
   let numSwap = 0;
   const letters = json.Amharic;
-  if (!slider || !select || !slider_label || !numCompDiv || !numSwapDiv || !scale) return; // if any UI is not loaded just return
 
-  const sortingAlgorithm = p.createSelect(select);
-  const musicalScale = p.createSelect(scale);
-  const sound = new SoundUtil(scale.value().toString());
+  const sound = new SoundUtil(init.ui.scale.value().toString());
   const queryParam = new QueryParams()
+
+  bindCallbackForUI(sound) // add function to the buttons(UIs)
   p.preload = () => {
-    // into_font = p.loadFont(
-    //   "/Algorithms-visualized/asset/fonts/yigezubisratgothic.ttf",
-    // );
     main_font = p.loadFont(
       "/Algorithms-visualized/asset/fonts/AbyssinicaSIL-R.ttf",
     );
   };
 
-  const checkQuery = () => {
-    const algorithms = ["Bubble Sort", "Insertion Sort", "Selection Sort", "Merge Sort", "Quick Sort", "Heap Sort"]
-    const selectedAlgorithm = queryParam.get("algorithm", algorithms); // give value only if it is in the list
-    if (!selectedAlgorithm)
-      queryParam.set("algorithm", sortingAlgorithm.selected());
-    else
-      sortingAlgorithm.value(selectedAlgorithm);
-  };
-
-  const intro = () => {
-    return new Promise<void>((resolve) => {
-      checkQuery(); // check the query before
-
-      const intro_Sort = SortingAlgorithmsFactory.SortWith(sortingAlgorithm.selected());
-      const num_array = json.nehemiah.letters.map((_: any, i: number) => i).reverse();
-      const restart = p.select("#restart");
-      const mute = p.select("#mute");
-      const muteCheckbox = p.select("#muteCheckbox");
-      if (!restart || !mute || !muteCheckbox) return; // if any ui has not been found return
-
-      // defalut values
-      muteCheckbox.checked(false);
-      slider.value(3);
-      slider_label.html("Speed: " + slider.value());
-      p.frameRate(+slider.value());
-
-      mute.mousePressed(() => {
-        isMutted = !isMutted;
-        isMutted ? sound.mute() : sound.unmute();
-      });
-      restart.mousePressed(() => {
-        sortAlgorithms = SortingAlgorithmsFactory.SortWith(sortingAlgorithm.selected());
-        iterator = sortAlgorithms.sort(createArrayForLetters(letters.letters)); // create array of numbers from the letters
-        nextIteration = iterator.next();
-        numSwap = 0;
-      });
-      slider.changed(() => {
-        p.frameRate(+slider.value()); // the plus symbol is to convert string to number
-        slider_label.html("Speed: " + slider.value());
-        if (slider.value() == 0) {
-          slider_label.html("Speed = 0, paused");
-        }
-      });
-
-      const intro_iterator = intro_Sort.sort(num_array);
-      let intro_nextIteration = intro_iterator.next();
-
-      const id = setInterval(() => {
-        p.background(25);
-        if (intro_nextIteration.done) { // if it finished drawing
-          drawArray({
-            p,
-            arr: lastValue,
-            swapIndex: [],
-            swaped: false,
-            json: json.nehemiah,
-            sound,
-            font: main_font,
-          });
-          clearInterval(id);
-          setTimeout(() => {
-            p.clear();
-            resolve();
-          }, 0);
-          return;
-        }
-        drawArray({
-          p,
-          arr: intro_nextIteration.value.arr,
-          swapIndex: intro_nextIteration.value.index,
-          swaped: intro_nextIteration.value.swaped,
-          json: json.nehemiah,
-          sound,
-          font: main_font,
-        });
-        lastValue = intro_nextIteration.value.arr;
-        intro_nextIteration = intro_iterator.next();
-      }, 400);
-    });
-  };
 
   p.setup = async () => {
     const cvs = p.createCanvas(app.clientWidth, app.clientHeight);
     cvs.style("z-index", "1000");
 
-    await intro();
+    await init.introScene(json.nehemiah, sound, main_font, queryParam);
 
-    sortAlgorithms = SortingAlgorithmsFactory.SortWith(sortingAlgorithm.selected()); // returns sorting algorithm class
+    sortAlgorithm = SortingAlgorithmsFactory.SortWith(selectedAlgorithm.selected()); // returns sorting algorithm class
     const letters_num = createArrayForLetters(letters.letters); // create array of numbers from the letters
 
-    iterator = sortAlgorithms.sort(letters_num); // sorts and returns iterator
+    iterator = sortAlgorithm.sort(letters_num); // sorts and returns iterator
     nextIteration = iterator.next();
 
     drawArray({
@@ -159,18 +76,16 @@ const sketch = (p: p5) => {
       console.log(selected);
     });
 
-    sortingAlgorithm.changed(() => {
-      sortAlgorithms = SortingAlgorithmsFactory.SortWith(sortingAlgorithm.selected());
-      iterator = sortAlgorithms.sort(createArrayForLetters(letters.letters)); // create array of numbers from the letters
+    selectedAlgorithm.changed(() => {
+      sortAlgorithm = SortingAlgorithmsFactory.SortWith(selectedAlgorithm.selected());
+      iterator = sortAlgorithm.sort(createArrayForLetters(letters.letters)); // create array of numbers from the letters
       nextIteration = iterator.next();
-      const urlParams = new URLSearchParams(window.location.search);
-      urlParams.set("algorithm", sortingAlgorithm.selected()); // set query parameter
-      history.replaceState(null, "", "?" + urlParams.toString());
+      queryParam.set("algorithm", selectedAlgorithm.selected())
 
       // reset
       numSwap = 0;
-      numCompDiv.html("0");
-      numSwapDiv.html("0");
+      init.ui?.numCompDiv.html("0");
+      init.ui?.numSwapDiv.html("0");
     });
     if (nextIteration.done) { // if it finished drawing
       drawArray({
@@ -194,11 +109,11 @@ const sketch = (p: p5) => {
       font: main_font,
     });
     // show stat
-    numCompDiv.html(`${nextIteration.value.numComp}`);
+    init.ui?.numCompDiv.html(`${nextIteration.value.numComp}`);
     if (nextIteration.value.swaped) {
       numSwap++;
     }
-    numSwapDiv.html(`${numSwap}`);
+    init.ui?.numSwapDiv.html(`${numSwap}`);
     lastValue = nextIteration.value.arr;
     nextIteration = iterator.next();
   };
@@ -215,6 +130,29 @@ const sketch = (p: p5) => {
       sound.unmute();
     }
   };
+  function bindCallbackForUI(sound: SoundUtil) {
+
+    if (!init.ui) return
+    init.ui.mute.mousePressed(() => {
+      isMutted = !isMutted;
+      isMutted ? sound.mute() : sound.unmute();
+    });
+    init.ui.restart.mousePressed(() => {
+      sortAlgorithm = SortingAlgorithmsFactory.SortWith(init.selections?.sortingAlgorithm.selected());
+      iterator = sortAlgorithm.sort(createArrayForLetters(letters.letters)); // create array of numbers from the letters
+      nextIteration = iterator.next();
+      numSwap = 0;
+    });
+    init.ui.slider.changed(() => {
+      if (!init.ui) return
+      p.frameRate(+init.ui.slider.value()); // the plus symbol is to convert string to number
+      init.ui.slider_label.html("Speed: " + init.ui.slider.value());
+      if (init.ui.slider.value() == 0) {
+        init.ui.slider_label.html("Speed = 0, paused");
+      }
+    });
+
+  }
 };
 
 new p5(sketch, app);
