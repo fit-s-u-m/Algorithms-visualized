@@ -34,10 +34,7 @@
       "ፈ",
       "ፐ"
     ],
-    "style": {
-      "color": "white",
-       "bg_color": "#444"
-    }
+  "size_multiplier":1
   },
   "nehemiah": {
     "letters": [
@@ -46,11 +43,7 @@
       "ም",
       "ያ"
     ],
-    "style": {
-      "color": "white",
-      "bg_color": "black",
-      "size_multiplier":4
-    }
+  "size_multiplier":4
   },
   "AmharicNums": {
     "letters": [
@@ -75,9 +68,6 @@
       "፲ ፱",
       "፳"
     ],
-    "style": {
-      "color": "white",
-      "bg_color": "#444"
-    }
+  "size_multiplier":1
   }
 }

@@ -3,7 +3,7 @@ import { InsertionSort } from '../algorithms/insertionSort'
 import { SelectionSort } from '../algorithms/selectionSort'
 import { MergeSort } from '../algorithms/mergeSort'
 import { sortingAlgorithms } from './types';
-export class Sort {
+export class SortingAlgorithmsFactory {
   static SortWith(sortingAlgoithm: sortingAlgorithms) {
     switch (sortingAlgoithm) {
       case "Bubble Sort": {
