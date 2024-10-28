@@ -133,10 +133,7 @@ const sketch = (p: p5) => {
   function bindCallbackForUI(sound: SoundUtil) {
 
     if (!init.ui) return
-    init.ui.mute.mousePressed(() => {
-      isMutted = !isMutted;
-      isMutted ? sound.mute() : sound.unmute();
-    });
+    init.ui.muteCheckbox.changed(toggleMute);
     init.ui.restart.mousePressed(() => {
       sortAlgorithm = SortingAlgorithmsFactory.SortWith(init.selections?.sortingAlgorithm.selected());
       iterator = sortAlgorithm.sort(createArrayForLetters(letters.letters)); // create array of numbers from the letters
@@ -152,6 +149,19 @@ const sketch = (p: p5) => {
       }
     });
 
+  }
+  function toggleMute() {
+    isMutted = !isMutted
+    if (isMutted) {
+      init.ui?.muteCheckbox.addClass("[--tglbg:red]")
+      init.ui?.mute.html("mute")
+      sound.mute()
+    }
+    else {
+      init.ui?.muteCheckbox.removeClass("[--tglbg:red]")
+      init.ui?.mute.html("unmute")
+      sound.unmute();
+    }
   }
 };
 

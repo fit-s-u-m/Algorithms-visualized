@@ -35,8 +35,8 @@ export class Init {
     const numCompDiv = this.p.select("#num-comp");
     const numSwapDiv = this.p.select("#num-swap");
     const restart = this.p.select("#restart");
-    const mute = this.p.select("#mute");
-    const muteCheckbox = this.p.select("#muteCheckbox");
+    const mute = this.p.select("#mute_text");
+    const muteCheckbox = this.p.select("#mute_checkBox");
 
     if (slider && select && slider_label && numCompDiv && numSwapDiv && scale && restart && mute && muteCheckbox) { // if any of them are not defined return false
       const sortingAlgorithm = this.p.createSelect(select);
