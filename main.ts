@@ -1,16 +1,15 @@
 import p5 from "p5"
-import { BubbleSort } from "./algorithms/bubbleSort"
 import * as json from "./public/asset/letters.json"
 import { drawArray, createArrayForLetters } from "./utils/arrayUtil"
 import { SoundUtil } from "./utils/soundUtil"
 import { Sort } from "./utils/sortAlgorithmsFactory"
-import { ITERATOR, ITERATOR_RESULT } from "./utils/types"
+import { ITERATOR, ITERATOR_RESULT, SortAlgorithm } from "./utils/types"
 
 const app = document.getElementById("app") as HTMLDivElement
 
 
 const sketch = (p: p5) => {
-  let sortAlgorithms: BubbleSort
+  let sortAlgorithms: SortAlgorithm
   let iterator: ITERATOR
   let nextIteration: ITERATOR_RESULT
   let lastValue: number[]
@@ -46,6 +45,8 @@ const sketch = (p: p5) => {
 
   const intro = async () => {
     return new Promise<void>((resolve) => {
+      // const urlParams = new URLSearchParams(window.location.search);
+      // const sorting = urlParams.get('myParam');
       const intro_Sort = Sort.SortWith(sortingAlgorithm.selected())
       const num_array = json.nehemiah.letters.map((_, i) => i).reverse()
       const restart = p.select("#restart")
