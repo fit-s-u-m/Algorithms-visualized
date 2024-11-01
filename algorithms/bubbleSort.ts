@@ -7,16 +7,19 @@ export class BubbleSort {
     let swaped = true
     let i = 1
     let numComp = 0
+    let n = arr.length
 
     while (swaped) {
       swaped = false
-      for (let j = 0; j < arr.length - i; j++) {
+      let lastSwappedIndex = 0;
+      for (let j = 0; j < n - 1; j++) {
         numComp++
         if (arr[j] > arr[j + 1]) {
           this.swap(arr, j + 1, j)
           swaped = true
+          lastSwappedIndex = j + 1;
           yield {
-            arr, index: [
+            arr: arr.slice(), index: [
               { i: j, c: "red" },
               { i: j + 1, c: "blue" }
             ], swaped: true, numComp
@@ -24,7 +27,7 @@ export class BubbleSort {
         }
         else {
           yield {
-            arr, index: [
+            arr: arr.slice(), index: [
               { i: j, c: "red" },
               { i: j + 1, c: "blue" }
             ], swaped: false, numComp
@@ -33,8 +36,9 @@ export class BubbleSort {
         }
       }
       i += 1
+      n = lastSwappedIndex;
     }
-    yield { arr, index: [], swaped: false, numComp }
+    yield { arr: arr.slice(), index: [], swaped: false, numComp }
 
   }
 

@@ -17,6 +17,10 @@ export class Init {
     mute: p5.Element,
     restart: p5.Element,
     muteCheckbox: p5.Element,
+    prev: p5.Element,
+    play: p5.Element,
+    next: p5.Element,
+    history_label: p5.Element
   } | null = null
   selections: {
     sortingAlgorithm: p5.Element,
@@ -37,12 +41,16 @@ export class Init {
     const restart = this.p.select("#restart");
     const mute = this.p.select("#mute_text");
     const muteCheckbox = this.p.select("#mute_checkBox");
+    const prev = this.p.select("#prev")
+    const play = this.p.select("#play")
+    const next = this.p.select("#next")
+    const history_label = this.p.select("#history_label")
 
-    if (slider && select && slider_label && numCompDiv && numSwapDiv && scale && restart && mute && muteCheckbox) { // if any of them are not defined return false
+    if (slider && select && slider_label && numCompDiv && numSwapDiv && scale && restart && mute && muteCheckbox && next && prev && history_label && play) { // if any of them are not defined return false
       const sortingAlgorithm = this.p.createSelect(select);
       const musicalScale = this.p.createSelect(scale);
       this.selections = { sortingAlgorithm, musicalScale }
-      this.ui = { select, slider, scale, slider_label, numCompDiv, numSwapDiv, mute, muteCheckbox, restart }
+      this.ui = { select, slider, scale, slider_label, numCompDiv, numSwapDiv, mute, muteCheckbox, restart, next, prev, history_label, play }
 
       // defalut values
       this.ui.muteCheckbox.checked(false);
@@ -62,7 +70,8 @@ export class Init {
       let intro_nextIteration = intro_iterator.next();
 
       const id = setInterval(() => {
-        this.p.background(25);
+        this.p.background(0);
+        // this.lastValue = intro_nextIteration.value.arr;
         if (intro_nextIteration.done) { // if it finished drawing
           drawArray({
             p: this.p,
@@ -80,16 +89,17 @@ export class Init {
           }, 5);
           return;
         }
-        drawArray({
-          p: this.p,
-          arr: intro_nextIteration.value.arr,
-          swapIndex: intro_nextIteration.value.index,
-          swaped: intro_nextIteration.value.swaped,
-          json: data,
-          sound,
-          font,
-        });
-        this.lastValue = intro_nextIteration.value.arr;
+        else {
+          drawArray({
+            p: this.p,
+            arr: intro_nextIteration.value.arr,
+            swapIndex: intro_nextIteration.value.index,
+            swaped: intro_nextIteration.value.swaped,
+            json: data,
+            sound,
+            font,
+          });
+        }
         intro_nextIteration = intro_iterator.next();
       }, 400);
     });

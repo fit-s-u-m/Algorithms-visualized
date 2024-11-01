@@ -14,7 +14,7 @@ export type ITERATOR = Iterator<
 export type ITERATOR_RESULT = IteratorResult<
   { arr: number[]; index: INDEX[]; swaped: boolean; numComp: number }
 >;
-export type INDEX = { i: number; c: string };
+export type INDEX = { i: number; c: string | [number, number, number] };
 export type JSON_DATA = {
   Amharic: {
     letters: string[];

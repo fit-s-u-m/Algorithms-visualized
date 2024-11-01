@@ -2,6 +2,7 @@ import { BubbleSort } from '../algorithms/bubbleSort';
 import { InsertionSort } from '../algorithms/insertionSort'
 import { SelectionSort } from '../algorithms/selectionSort'
 import { MergeSort } from '../algorithms/mergeSort'
+import { HeapSort } from "../algorithms/heapSort"
 import { sortingAlgorithms } from './types';
 export class SortingAlgorithmsFactory {
   static SortWith(sortingAlgoithm: sortingAlgorithms) {
@@ -16,7 +17,7 @@ export class SortingAlgorithmsFactory {
         return new SelectionSort()
       }
       case "Heap Sort": {
-        return new BubbleSort()
+        return new HeapSort()
       }
       case "Merge Sort": {
         return new MergeSort()

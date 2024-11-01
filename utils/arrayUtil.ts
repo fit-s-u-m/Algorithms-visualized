@@ -29,8 +29,13 @@ export const drawArray = (
     const maxHeight = (0.5) * p.height; // half of the height
     const xPos = (i * xWidth) + xWidth / 2 + remaingSpace / 2;
     const yHeight = p.map(arr[i], 0, arr.length, 10, maxHeight);
+    p.colorMode(p.HSB)
     swapIndex.filter((index) => index.i == i).forEach((index) => {
-      p.fill(index.c);
+      if (typeof (index.c) == "string")
+        p.fill(index.c);
+      else {
+        p.fill(...index.c);
+      }
     });
     const barSize = p.map(p.width, 50, 2000, 2, 10);
     p.rect(xPos, p.height, barSize, -yHeight); // bar representing the array

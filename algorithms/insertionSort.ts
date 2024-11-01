@@ -14,7 +14,7 @@ export class InsertionSort {
           this.swap(arr, j, currentIndex)
           currentIndex = j  // it swaped with j
           yield {
-            arr, index: [
+            arr: arr.slice(), index: [
               { i: i, c: "red" },
               { i: j, c: "blue" },
               { i: j - 1, c: "green" },
@@ -24,7 +24,7 @@ export class InsertionSort {
         }
         else { // it is in the right spot 
           yield {
-            arr, index: [
+            arr: arr.slice(), index: [
               { i: i, c: "red" },
               { i: j, c: "blue" },
               { i: j - 1, c: "green" },
@@ -36,7 +36,7 @@ export class InsertionSort {
       }
     }
     yield {
-      arr, index: [],
+      arr: arr.slice(), index: [],
       swaped: false, numComp: counter
     }
   }

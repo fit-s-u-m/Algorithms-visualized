@@ -11,18 +11,28 @@
 
 <body>
   <div id="app"></div>
-  <div id="btn-container" class="my-3 mx-2  flex-col sm:flex-row">
-    <button id="restart" class="btns">
-      <svg xmlns="http://www.w3.org/2000/svg" width="1.5em" height="1.5em" viewBox="0 0 24 24">
-        <g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="4">
-          <path d="M12 3a9 9 0 1 1-5.657 2" />
-          <path d="M3 4.5h4v4" />
-        </g>
-      </svg></button>
-    <div class="flex flex-col justify-center items-center gap-3">
-      <input type="checkbox" class="toggle toggle-lg toggle-accent border-black bg-black [--tglbg:red]"
-        checked="checked" id="mute_checkBox" />
-      <div class="badge badge-accent font-bold" id="mute_text">mute</div>
+  <div id="btn-container" class="my-3 mx-2  flex-col">
+    <div class="flex flex-col">
+      <div class="gap-3 flex">
+        <button id="prev" class="btns">prev</button>
+        <button id="play" class="btns">play</button>
+        <button id="next" class="btns">next</button>
+      </div>
+      <div id="history_label">history:0</div>
+    </div>
+    <div class="flex flex-row gap-5">
+      <button id="restart" class="btns">
+        <svg xmlns="http://www.w3.org/2000/svg" width="1.5em" height="1.5em" viewBox="0 0 24 24">
+          <g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="4">
+            <path d="M12 3a9 9 0 1 1-5.657 2" />
+            <path d="M3 4.5h4v4" />
+          </g>
+        </svg></button>
+      <div class="flex flex-col justify-center items-center gap-3">
+        <input type="checkbox" class="toggle toggle-lg toggle-accent border-black bg-black [--tglbg:red]"
+          checked="checked" id="mute_checkBox" />
+        <div class="badge badge-accent font-bold" id="mute_text">mute</div>
+      </div>
     </div>
 
   </div>
@@ -80,6 +90,7 @@
         <option>Insertion Sort</option>
         <option>Selection Sort</option>
         <option>Merge Sort</option>
+        <option>Heap Sort</option>
       </select>
       <select id="scale" class="select select-accent w-full max-w-xs choose select-sm bg-accent text-black mx-2">
         <option selected>አንቺሆዬ</option>

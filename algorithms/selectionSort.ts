@@ -14,7 +14,7 @@ export class SelectionSort {
           min = arr[j] // undate the min
           minIndex = j
           yield {
-            arr, index: [
+            arr: arr.slice(), index: [
               { i: j, c: "red" },
               { i: minIndex, c: "blue" },
               { i: i, c: "green" }
@@ -24,7 +24,7 @@ export class SelectionSort {
         }
         else {
           yield {
-            arr, index: [
+            arr: arr.slice(), index: [
               { i: j, c: "red" },
               { i: minIndex, c: "blue" },
               { i: i, c: "green" }
@@ -35,7 +35,7 @@ export class SelectionSort {
       }
       this.swap(arr, i, minIndex)
       yield {
-        arr, index: [
+        arr: arr.slice(), index: [
           { i: i, c: "red" },
           { i: minIndex, c: "blue" },
         ],
@@ -43,7 +43,7 @@ export class SelectionSort {
       }
     }
     yield {
-      arr, index: [],
+      arr: arr.slice(), index: [],
       swaped: false, numComp: counter
     }
   }
