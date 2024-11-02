@@ -4,16 +4,17 @@ import { createArrayForLetters, drawArray } from "./utils/arrayUtil.ts";
 import { SoundUtil } from "./utils/soundUtil.ts";
 import { SortingAlgorithmsFactory } from "./utils/sortAlgorithmsFactory.ts";
 import { Init } from "./intro_scene.ts";
+import { History } from "./utils/history.ts";
 import {
   ITERATOR,
   ITERATOR_RESULT,
   SortAlgorithm,
+  State,
 } from "./utils/types.ts";
 import QueryParams from "./utils/queryParams.ts";
 
 const app = document.getElementById("app") as HTMLDivElement;
-const history: ITERATOR_RESULT[] = [];
-let curentHistroyIndex = 0;
+const history = new History()
 
 const sketch = (p: p5) => {
   const init = new Init(p);
@@ -53,7 +54,12 @@ const sketch = (p: p5) => {
 
     iterator = sortAlgorithm.sort(letters_num);
     nextIteration = iterator.next();
-    history.unshift(nextIteration);
+    const state: State = {
+      arr: nextIteration.value.arr,
+      index: nextIteration.value.index.slice(),
+      swaped: false,
+    }
+    history.saveState(state)
 
     drawArray({
       p,
@@ -88,7 +94,11 @@ const sketch = (p: p5) => {
       return;
     }
 
-    drawCurrentIteration();
+    const speed = init.ui?.slider.value()
+    if (speed == '0')
+      displayCurrentHistoryState()
+    else
+      drawCurrentIteration();
   };
 
   function resetSorting() {
@@ -96,13 +106,12 @@ const sketch = (p: p5) => {
     iterator = sortAlgorithm.sort(createArrayForLetters(letters.letters));
     nextIteration = iterator.next();
     queryParam.set("algorithm", selectedAlgorithm.selected());
+    history.resetState()
 
     // Reset UI
     numSwap = 0;
     init.ui?.numCompDiv.html("0");
     init.ui?.numSwapDiv.html("0");
-    history.length = 0; // Clear history for a new sort
-    curentHistroyIndex = 0; // Reset current index
   }
 
   function drawFinalState() {
@@ -136,9 +145,12 @@ const sketch = (p: p5) => {
     init.ui?.numSwapDiv.html(`${numSwap}`);
     lastValue = nextIteration.value.arr;
     nextIteration = iterator.next();
-    history.unshift(nextIteration);
-
-    if (history.length > 100) history.pop(); // Limit history size
+    const state: State = {
+      arr: nextIteration.value.arr,
+      index: nextIteration.value.index.slice(),
+      swaped: false,
+    }
+    history.saveState(state)
   }
 
   p.windowResized = () => {
@@ -166,47 +178,58 @@ const sketch = (p: p5) => {
       const value = +init.ui.slider.value();
       p.frameRate(value);
       init.ui.slider_label.html(value === 0 ? "Speed = 0, paused" : "Speed: " + value);
+      init.ui.play.html(value === 0 ? "play" : "pause")
+      history.stateIndex = 0
+      init.ui.history_label.html("History: " + 0)
     });
 
     init.ui.prev.mousePressed(() => {
-      if (curentHistroyIndex < history.length - 1) {
-        curentHistroyIndex++;
-        displayCurrentHistoryState();
-      }
+      history.prev()
+      displayCurrentHistoryState()
     });
     init.ui.play.mousePressed(() => {
       if (!init.ui) return
       const prevSpeed = +init.ui.slider.value();
-      if (prevSpeed != 0) return
-      const speed = 3
-      init.ui.slider.value(speed);
-      init.ui.history_label.html("History: " + 0)
-      p.frameRate(speed);
-      init.ui.slider_label.html(`Speed: ${speed}`);
+      if (prevSpeed == 0) {
+        const speed = 3
+        init.ui.slider.value(speed);
+        init.ui.history_label.html("History: " + 0)
+        history.stateIndex = 0
+        p.frameRate(speed);
+        init.ui.slider_label.html(`Speed: ${speed}`);
+        init.ui.play.html("pause")
+      }
+      else {
+        const speed = 0
+        init.ui.slider.value(speed);
+        p.frameRate(speed);
+        init.ui.slider_label.html("Paused");
+        init.ui.play.html("play")
+      }
     });
 
     init.ui.next.mousePressed(() => {
-      if (curentHistroyIndex > 0) {
-        curentHistroyIndex--;
-        displayCurrentHistoryState();
-      }
+      history.next()
+      displayCurrentHistoryState()
     });
   }
 
   function displayCurrentHistoryState() {
-    const iteration = history[curentHistroyIndex];
     init.ui?.slider.value(0);
-    init.ui?.slider_label.html("paused");
+    init.ui?.slider_label.html("Paused");
+    init.ui?.play.html("play")
     p.frameRate(0); // Pause drawing
 
-    init.ui?.history_label.html("History: " + (curentHistroyIndex * -1));
+    init.ui?.history_label.html("History: " + (history.stateIndex));
 
     p.clear();
+    const state = history.getState()
+    console.log(state.index)
     drawArray({
       p,
-      arr: iteration.value.arr,
-      swapIndex: iteration.value.index,
-      swaped: iteration.value.swaped,
+      arr: state.arr,
+      swapIndex: state.index,
+      swaped: state.swaped,
       json: letters,
       sound,
       font: main_font,

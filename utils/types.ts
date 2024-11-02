@@ -29,3 +29,8 @@ export type JSON_DATA = {
     style: { color: string; bg_color: string };
   };
 };
+export interface State {
+  arr: number[],
+  index: INDEX[],
+  swaped: boolean,
+}
