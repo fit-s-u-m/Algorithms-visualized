@@ -240,11 +240,9 @@ const sketch = (p: p5) => {
     isMutted = !isMutted;
     if (isMutted) {
       init.ui?.muteCheckbox.addClass("[--tglbg:red]");
-      init.ui?.mute.html("mute");
       sound.mute();
     } else {
       init.ui?.muteCheckbox.removeClass("[--tglbg:red]");
-      init.ui?.mute.html("unmute");
       sound.unmute();
     }
   }

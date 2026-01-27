@@ -12,28 +12,48 @@
 <body>
   <div id="app"></div>
   <div id="btn-container" class="my-3 mx-2  flex-col">
-    <div class="flex flex-col">
-      <div class="gap-3 flex">
+    <div class="flex flex-col gap-2">
+      <div id="history_label" class="text-center">History:0</div>
+
+      <div class="gap-2 flex">
         <button id="prev" class="btns">prev</button>
         <button id="play" class="btns">pause</button>
         <button id="next" class="btns">next</button>
       </div>
-      <div id="history_label">history:0</div>
-    </div>
-    <div class="flex flex-row gap-5">
-      <button id="restart" class="btns">
-        <svg xmlns="http://www.w3.org/2000/svg" width="1.5em" height="1.5em" viewBox="0 0 24 24">
-          <g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="4">
-            <path d="M12 3a9 9 0 1 1-5.657 2" />
-            <path d="M3 4.5h4v4" />
-          </g>
-        </svg></button>
-      <div class="flex flex-col justify-center items-center gap-3">
-        <input type="checkbox" class="toggle toggle-lg toggle-accent border-black bg-black [--tglbg:red]"
-          checked="checked" id="mute_checkBox" />
-        <div class="badge badge-accent font-bold" id="mute_text">mute</div>
+
+      <div class="flex flex-row gap-2 width-100">
+
+        <button id="restart" class="btns items-center">
+          <svg xmlns="http://www.w3.org/2000/svg" width="1.5em" height="1.5em" viewBox="0 0 24 24">
+            <g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="4">
+              <path d="M12 3a9 9 0 1 1-5.657 2" />
+              <path d="M3 4.5h4v4" />
+            </g>
+          </svg>
+        </button>
+
+        <label class="mute-toggle btns flex-1">
+          <input type="checkbox" id="mute_checkbox" checked="checked" />
+
+          <svg viewBox="0 0 24 24" width="2.5em" height="2.5em">
+            <!-- UNMUTE ICON -->
+            <g class="icon-unmute">
+              <path d="M3 9v6h4l5 5V4L7 9H3z"/>
+              <path d="M14 3.23v2.06c2.89 1 5 3.77 5 7.71s-2.11 6.71-5 7.71v2.06c4.01-1.07 7-4.71 7-9.77s-2.99-8.7-7-9.77z"/>
+            </g>
+
+            <!-- MUTE ICON -->
+            <g class="icon-mute">
+              <path d="M3 9v6h4l5 5V4L7 9H3z"/>
+              <line x1="16" y1="8" x2="22" y2="14" stroke="#fbf1c7" stroke-width="2" stroke-linecap="round"/>
+              <line x1="22" y1="8" x2="16" y2="14" stroke="#fbf1c7" stroke-width="2" stroke-linecap="round"/>
+            </g>
+          </svg>
+        </label>
       </div>
+
     </div>
+
 
   </div>
 
@@ -69,9 +89,9 @@
     </div>
     <div>
       <div class="slider">
-        <label for="slider" class="text-cyan-500" id="slider-label">Speed</label>
-        <input id="slider" type="range" min="0" max="10" value="4" class="range fill-red-300" step="1" />
-        <div class="flex w-full justify-between px-2 text-xs text-accent">
+        <label for="slider" class="text-accent-light" id="slider-label">Speed</label>
+        <input id="slider" type="range" min="0" max="10" value="4" class="range" step="1" />
+        <div id="tick" class="flex w-full justify-between px-2 text-xs text-accent">
           <span>|</span>
           <span>|</span>
           <span>|</span>

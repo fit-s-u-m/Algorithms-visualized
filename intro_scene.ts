@@ -4,6 +4,7 @@ import { SoundUtil } from "./utils/soundUtil.ts";
 import { SortAlgorithm } from "./utils/types.ts";
 import { createArrayForLetters, drawArray } from "./utils/arrayUtil.ts"
 import QueryParam from "./utils/queryParams.ts"
+import {BG_COLOR } from "./utils/constant.ts";
 
 export class Init {
   p: p5
@@ -14,7 +15,6 @@ export class Init {
     slider_label: p5.Element,
     numCompDiv: p5.Element,
     numSwapDiv: p5.Element,
-    mute: p5.Element,
     restart: p5.Element,
     muteCheckbox: p5.Element,
     prev: p5.Element,
@@ -39,18 +39,17 @@ export class Init {
     const numCompDiv = this.p.select("#num-comp");
     const numSwapDiv = this.p.select("#num-swap");
     const restart = this.p.select("#restart");
-    const mute = this.p.select("#mute_text");
-    const muteCheckbox = this.p.select("#mute_checkBox");
+    const muteCheckbox = this.p.select("#mute_checkbox");
     const prev = this.p.select("#prev")
     const play = this.p.select("#play")
     const next = this.p.select("#next")
     const history_label = this.p.select("#history_label")
 
-    if (slider && select && slider_label && numCompDiv && numSwapDiv && scale && restart && mute && muteCheckbox && next && prev && history_label && play) { // if any of them are not defined return false
+    if (slider && select && slider_label && numCompDiv && numSwapDiv && scale && restart && muteCheckbox && next && prev && history_label && play) { // if any of them are not defined return false
       const sortingAlgorithm = this.p.createSelect(select);
       const musicalScale = this.p.createSelect(scale);
       this.selections = { sortingAlgorithm, musicalScale }
-      this.ui = { select, slider, scale, slider_label, numCompDiv, numSwapDiv, mute, muteCheckbox, restart, next, prev, history_label, play }
+      this.ui = { select, slider, scale, slider_label, numCompDiv, numSwapDiv, muteCheckbox, restart, next, prev, history_label, play }
 
       // defalut values
       this.ui.muteCheckbox.checked(false);
@@ -70,7 +69,7 @@ export class Init {
       let intro_nextIteration = intro_iterator.next();
 
       const id = setInterval(() => {
-        this.p.background(0);
+        this.p.background(BG_COLOR);
         // this.lastValue = intro_nextIteration.value.arr;
         if (intro_nextIteration.done) { // if it finished drawing
           drawArray({

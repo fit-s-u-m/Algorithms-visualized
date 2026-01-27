@@ -2,13 +2,34 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+  /* Background scale (Gruvbox dark) */
+  --bg-0: #1d2021;
+  --bg-1: #282828;
+  --bg-2: #3c3836;
+  --bg-3: #504945;
+  --bg-4: #665c54;
+
+  /* Light foreground scale */
+  --fg-0: #fbf1c7;
+  --fg-1: #ebdbb2;
+  --fg-2: #d5c4a1;
+
+  /* Accent colors (no yellow/gold) */
+  --accent-orange: #fe8019;
+  --accent-red: #fb4934;
+  --accent-green: #b8bb26;
+  --accent-blue: #83a598;
+  --accent-purple: #d3869b;
+  --accent-aqua: #8ec07c;
+}
 html,
 body {
   margin: 0;
   height: 100%;
   overflow: hidden;
-  /* background: #332200; */
-  background: #000;
+  background: var(--bg-0);
+  color: var(--fg-1);
 }
 
 #app {
@@ -34,22 +55,89 @@ body {
 
 .choose {
   z-index: 10000;
-  /* position: absolute; */
-  /* top: 0; */
-  /* right: 0; */
 }
 
 .slider {
   z-index: 10000;
-  /* position: absolute; */
-  /* top: 0; */
-  /* right: 0; */
+}
+
+.stat {
+  background: var(--fg-1);
+  color: var(--bg-0);
+}
+
+#slider,
+#select,
+#scale {
+  background: var(--fg-1);
+  border: 1px solid var(--bg-3);
+  color: var(--bg-0);
+}
+
+#tick {
+  color: var(--fg-1);
 }
 
 .btns {
-  @apply btn btn-accent active:btn-error;
+  @apply btn;
+
+  background-color: var(--bg-0);
+  color: var(--fg-0);
+  border-color: var(--fg-1);
 }
 
-.btns-click {
-  @apply btn btn-accent btn-error active:bg-blue-100;
+.btns:hover {
+  background-color: var(--fg-0);
+  border-color: var(--fg-0);
+  color: var(--bg-0);
+}
+
+
+/* Gruvbox Toggle */
+.toggle-accent {
+  --tglbg: var(--bg-2);              /* track background when OFF */
+  --tglbg-focus: var(--bg-3);
+  --tglbg-hover: var(--bg-3);
+  --tglbtn: var(--fg-0);             /* circle color */
+  --tglbtn-hover: var(--fg-0);
+  --tglbtn-active: var(--fg-0);
+  --tglactivebg: var(--fg-0); /* track when ON */
+  --tglactiveborder: var(--fg-0);
+}
+
+.toggle-accent:checked {
+  --tglbg: var(--fg-0);
+  --tglactiveborder: var(--fg-0);
+  background-color: var(--bg-0);
+  border-color: var(--fg-0);
+}
+.toggle-accent:active {
+  --tglbg-hover: var(--bg-4);
+}
+.mute-toggle {
+  cursor: pointer;
+  display: inline-block;
+}
+
+.mute-toggle input {
+  display: none;
+}
+
+svg {
+  fill: var(--fg-1);
+  transition: transform 0.2s ease, fill 0.2s ease;
+}
+
+/* Hide mute icon by default */
+.icon-unmute {
+  display: none;
+}
+
+/* When checked → show mute, hide unmute */
+input:checked ~ svg .icon-unmute {
+  display: block;
+}
+
+input:checked ~ svg .icon-mute {
+  display: none;
 }
